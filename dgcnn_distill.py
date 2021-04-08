@@ -280,8 +280,7 @@ def test(args, io):
 if __name__ == "__main__":
     # Training settings
     parser = argparse.ArgumentParser(description='Point Cloud Recognition')
-    parser.add_argument('--exp_name', type=str, default='exp', metavar='N',
-                        help='Name of the experiment')
+    parser.add_argument('--exp_name', type=str, default='exp', metavar='N', help='Name of the experiment')
     parser.add_argument('--stage', type=int, default=1, metavar='N')
     parser.add_argument('--suffix', type=str, default='', metavar='N')
     parser.add_argument('--additional_suffix', type=str, default='', metavar='N')

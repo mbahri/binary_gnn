@@ -22,7 +22,7 @@ class _STEQuantizer(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, grad_out_):
-        in_, = ctx.saved_tensors
+        (in_,) = ctx.saved_tensors
 
         cond = in_.abs() <= 1
         zeros = torch.zeros_like(grad_out_)
@@ -94,7 +94,6 @@ class LearnedRescaleLayer1d(nn.Module):
         self.scale_a = nn.Parameter(torch.Tensor(self.shapes[1], 1).fill_(1))
         self.scale_b = nn.Parameter(torch.Tensor(1, self.shapes[2]).fill_(1))
 
-
     def reset_parameters(self):
         nn.init.ones_(self.scale_a)
         nn.init.ones_(self.scale_b)
@@ -115,7 +114,11 @@ class LearnedRescaleLayer0d(nn.Module):
         """
 
         self.shapes = input_shapes
-        self.scale_a = nn.Parameter(torch.Tensor(self.shapes[1],).fill_(1))
+        self.scale_a = nn.Parameter(
+            torch.Tensor(
+                self.shapes[1],
+            ).fill_(1)
+        )
 
     def reset_parameters(self):
         nn.init.ones_(self.scale_a)
@@ -136,7 +139,9 @@ class LearnedRescaleLayer1db(nn.Module):
         """
 
         self.shapes = input_shapes
-        self.scale_a = nn.Parameter(torch.Tensor(self.shapes[0],self.shapes[1]).fill_(1))
+        self.scale_a = nn.Parameter(
+            torch.Tensor(self.shapes[0], self.shapes[1]).fill_(1)
+        )
 
     def forward(self, x):
         out = x * self.scale_a
@@ -228,7 +233,18 @@ class Identity(nn.Identity):
 
 
 class BinConv1d(nn.Module):
-    def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=False, binary_weights=True):
+    def __init__(
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride=1,
+        padding=0,
+        dilation=1,
+        groups=1,
+        bias=False,
+        binary_weights=True,
+    ):
         super(BinConv1d, self).__init__()
         """
         An implementation of a Linear layer.
@@ -247,7 +263,9 @@ class BinConv1d(nn.Module):
 
         self.binary_weights = binary_weights
 
-        self.weights_real = nn.Parameter(torch.Tensor(out_channels, in_channels, kernel_size))
+        self.weights_real = nn.Parameter(
+            torch.Tensor(out_channels, in_channels, kernel_size)
+        )
         nn.init.kaiming_normal_(self.weights_real)
 
     def forward(self, x):
@@ -265,13 +283,31 @@ class BinConv1d(nn.Module):
         else:
             weights = self.weights_real
 
-        out = F.conv1d(x, weights, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups)
+        out = F.conv1d(
+            x,
+            weights,
+            stride=self.stride,
+            padding=self.padding,
+            dilation=self.dilation,
+            groups=self.groups,
+        )
 
         return out
 
 
 class BinConv2d(nn.Module):
-    def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=False, binary_weights=True):
+    def __init__(
+        self,
+        in_channels,
+        out_channels,
+        kernel_size,
+        stride=1,
+        padding=0,
+        dilation=1,
+        groups=1,
+        bias=False,
+        binary_weights=True,
+    ):
         super(BinConv2d, self).__init__()
         """
         An implementation of a Linear layer.
@@ -295,7 +331,9 @@ class BinConv2d(nn.Module):
         else:
             k1, k2 = kernel_size
 
-        self.weights_real = nn.Parameter(torch.Tensor(out_channels, in_channels, k1, k2))
+        self.weights_real = nn.Parameter(
+            torch.Tensor(out_channels, in_channels, k1, k2)
+        )
         nn.init.kaiming_normal_(self.weights_real)
 
     def forward(self, x):
@@ -313,7 +351,14 @@ class BinConv2d(nn.Module):
         else:
             weights = self.weights_real
 
-        out = F.conv2d(x, weights, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups)
+        out = F.conv2d(
+            x,
+            weights,
+            stride=self.stride,
+            padding=self.padding,
+            dilation=self.dilation,
+            groups=self.groups,
+        )
 
         return out
 
@@ -340,6 +385,7 @@ class MeanCenter(nn.Module):
 
     def reset_parameters(self):
         pass
+
 
 def count_trainable_parameters(model):
     model_parameters = filter(lambda p: p.requires_grad, model.parameters())

@@ -5,7 +5,7 @@ import torch_scatter as ts
 
 def hamming_relaxed(z_i, z_j):
     "Continuous relaxation of the Hamming distance for vectors valued in F{-1,1}"
-    return 0.5 * ( -z_i * z_j + 1).sum(-1)
+    return 0.5 * (-z_i * z_j + 1).sum(-1)
 
 
 def rbf_hamming(z_i, z_j):
@@ -13,11 +13,11 @@ def rbf_hamming(z_i, z_j):
 
 
 def rbf_hamming_sq(z_i, z_j):
-    return torch.exp(-hamming_relaxed(z_i, z_j)**2)
+    return torch.exp(-hamming_relaxed(z_i, z_j) ** 2)
 
 
 def l2(z_i, z_j):
-    return torch.cdist(z_i.unsqueeze(1), z_j.unsqueeze(1), p=2).squeeze()**2
+    return torch.cdist(z_i.unsqueeze(1), z_j.unsqueeze(1), p=2).squeeze() ** 2
 
 
 def rbf_l2(z_i, z_j):
@@ -29,7 +29,7 @@ def linear(z_i, z_j):
 
 
 def poly(z_i, z_j, c=0, d=2):
-    return (linear(z_i, z_j) + c)**d
+    return (linear(z_i, z_j) + c) ** d
 
 
 class StructuralSimilarity(torch.nn.Module):
@@ -65,8 +65,7 @@ class StructuralSimilarity(torch.nn.Module):
         ls_s, ls_t, e_u = self.compute_ls_both(z_s, z_t, e_s, e_t)
 
         return ts.scatter_sum(
-            F.kl_div(ls_s, ls_t, reduction='none', log_target=True),
-            e_u[0]
+            F.kl_div(ls_s, ls_t, reduction="none", log_target=True), e_u[0]
         ).mean()
 
 
@@ -80,10 +79,12 @@ class CrossEntropyWithTemperature(torch.nn.Module):
         ls_s = F.log_softmax(z_s / self.T, dim=1)
         ls_t = F.log_softmax(z_t / self.T, dim=1)
 
-        return self.T**2 * F.kl_div(ls_s, ls_t, log_target=True, reduction='batchmean')
+        return self.T ** 2 * F.kl_div(
+            ls_s, ls_t, log_target=True, reduction="batchmean"
+        )
 
 
 def get_att_vector(x):
-        x_vol = torch.norm(x, dim=-1)**2
-        x_vol = x_vol / torch.norm(x_vol, dim=-1, keepdim=True)
-        return x_vol
+    x_vol = torch.norm(x, dim=-1) ** 2
+    x_vol = x_vol / torch.norm(x_vol, dim=-1, keepdim=True)
+    return x_vol

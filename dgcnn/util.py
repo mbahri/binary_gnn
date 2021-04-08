@@ -14,7 +14,7 @@ import torch.nn.functional as F
 
 
 def cal_loss(pred, gold, smoothing=True):
-    ''' Calculate cross entropy loss, apply label smoothing if needed. '''
+    """ Calculate cross entropy loss, apply label smoothing if needed. """
 
     gold = gold.contiguous().view(-1)
 
@@ -28,18 +28,18 @@ def cal_loss(pred, gold, smoothing=True):
 
         loss = -(one_hot * log_prb).sum(dim=1).mean()
     else:
-        loss = F.cross_entropy(pred, gold, reduction='mean')
+        loss = F.cross_entropy(pred, gold, reduction="mean")
 
     return loss
 
 
-class IOStream():
+class IOStream:
     def __init__(self, path):
-        self.f = open(path, 'a')
+        self.f = open(path, "a")
 
     def cprint(self, text):
         print(text)
-        self.f.write(text+'\n')
+        self.f.write(text + "\n")
         self.f.flush()
 
     def close(self):
