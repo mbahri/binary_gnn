@@ -1,7 +1,7 @@
 # Binary Graph Neural Networks
 Code for our paper "Binary Graph Neural Networks", CVPR 2021
 
-![Overview of the distillation process](images/distillation_bin.png)
+<img src='./images/distillation_bin.png' height=265>
 
 ## Common code
 
@@ -11,7 +11,7 @@ distillation.py: Implements cross-entropy with temperature and LSP.
 
 ## DGCNN
 
-![Accuracy of different binary DGCNN variants](images/barplot_perf.png)
+<img src='./images/barplot_perf.png' height=265>
 
 dgcnn/models_extended: code that implements the variants of binary DGCNN presented in the paper:
 - BaseDGCNN: the model used in stage 1 that mimics the architecture of the binary networks but with floating point weights and activations and `tanh` activations
@@ -37,7 +37,7 @@ binsage_proteins_scratch.py: Trains a binarized GraphSAGE from scratch on OGB-N 
 
 ## Coming soon
 
-![Speed on a Raspberry Pi 4B](images/benchmark_pi.png)
+<img src='./images/benchmark_pi.png' height=265>
 
 We intend to release our LARQ implementations (used for testing on a Raspberry Pi 4B) soon.
 
