@@ -1,6 +1,8 @@
 # Binary Graph Neural Networks
 Code for our paper "Binary Graph Neural Networks", CVPR 2021
 
+ArXiv: https://arxiv.org/abs/2012.15823
+
 <img src='./images/distillation_bin.png' height=265>
 
 ## Common code
